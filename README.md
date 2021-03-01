@@ -32,7 +32,7 @@ In addition to these folders, there are two files:
 - `model_generator.py`, where the transformation from **trace data** to **NuSMV model file** and **PlantUML state machines** takes place. Note that lines 190-200 in this file specifies folders/locations of files. Make sure that these are setup in a proper way for your system. 
 
 ## Evaluating the model in NuSMV
-The NuSMV software is used to evaluate the `.svm` model files that are generated from the model generator. 
+The NuSMV software is used to evaluate the `.svm` model files that are generated from the model generator. Here, you also state the functional properties that the model should adhere to.
 - Download: https://nusmv.fbk.eu/
 - Guides:
   - User Manual: https://nusmv.fbk.eu/NuSMV/userman/index-v2.html
