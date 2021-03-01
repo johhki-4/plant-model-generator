@@ -188,16 +188,16 @@ def generate_data(trace, component):
                 
 
 def getFile():
-        return "C:\\Users\\JohannesWIN10\\Documents\\nxtSTUDIOProjects\\EnAS 2020 VC\\SkillServer\\nxtSTUDIO\\EnAS 2020 VC with Skills\\NuSMV_Models\\" + getTime()
+        return "C:\\Users\\JohannesWIN10\\Documents\\nxtSTUDIO\\EnAS 2020 VC with Skills\\NuSMV_Models\\" + getTime()
 
 def writeToUmlfile(text):
-        with open("C:\\Users\\JohannesWIN10\\Documents\\nxtSTUDIOProjects\\EnAS 2020 VC\\SkillServer\\nxtSTUDIO\\EnAS 2020 VC with Skills\\PlantUML_StateMachines\\uml.txt", "a") as file:
+        with open("C:\\Users\\JohannesWIN10\\Documents\\nxtSTUDIO\\EnAS 2020 VC with Skills\\PlantUML_StateMachines\\uml.txt", "a") as file:
                 file.write(text + "\n")
 
 ### variables
 # name/location of read file and name/location to save the new file
 activeTrace = "2020_11_6_11_58_trace_log.txt"
-filePath = "C:\\Users\\JohannesWIN10\\Documents\\nxtSTUDIOProjects\\EnAS 2020 VC\\SkillServer\\nxtSTUDIO\\EnAS 2020 VC with Skills\\GeneratedTraces\\" + getTime() + "_log.smv"
+filePath = "C:\\Users\\JohannesWIN10\\Documents\\nxtSTUDIO\\EnAS 2020 VC with Skills\\GeneratedTraces\\" + getTime() + "_log.smv"
 initial_values = addInitial_values()
 
 #Make sure that the stages are generated in the correct sequence. The entire VAR section needs to be done before the INIT section can be created. the same goes for NEXT.
