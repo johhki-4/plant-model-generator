@@ -8,7 +8,7 @@ When you get to:
   - Requirements
     - Setting up dependencies,
 
-do the same steps for the ´AFOF_2.py´ file given in this repository. 
+do the same steps for the `AFOF_2.py` file given in this repository. 
 
 You also need to go into the file and on line 30 specify the desired location.
 
