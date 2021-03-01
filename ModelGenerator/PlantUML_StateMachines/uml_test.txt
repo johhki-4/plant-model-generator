@@ -1,0 +1,370 @@
+@startuml
+[*] --> State1
+State1 : AGV_conveyor = off
+State1 : AGV_con_sensor = not_detected
+State1 : AGV_cup_sensor = not_detected
+State1 : AGV_position = start
+State1 --> State2
+State2 : AGV_conveyor = off
+State2 : AGV_con_sensor = not_detected
+State2 : AGV_cup_sensor = not_detected
+State2 : AGV_position = in_motion_FWD
+State2 --> State3
+State3 : AGV_conveyor = off
+State3 : AGV_con_sensor = not_detected
+State3 : AGV_cup_sensor = not_detected
+State3 : AGV_position = connected
+State3 --> State4
+State4 : AGV_conveyor = off
+State4 : AGV_con_sensor = connected
+State4 : AGV_cup_sensor = not_detected
+State4 : AGV_position = connected
+State4 --> State5
+State5 : AGV_conveyor = on
+State5 : AGV_con_sensor = connected
+State5 : AGV_cup_sensor = not_detected
+State5 : AGV_position = connected
+State5 --> State6
+State6 : AGV_conveyor = on
+State6 : AGV_con_sensor = connected
+State6 : AGV_cup_sensor = detected
+State6 : AGV_position = connected
+State6 --> State5
+State5 : AGV_conveyor = on
+State5 : AGV_con_sensor = connected
+State5 : AGV_cup_sensor = not_detected
+State5 : AGV_position = connected
+State5 --> State4
+State4 : AGV_conveyor = off
+State4 : AGV_con_sensor = connected
+State4 : AGV_cup_sensor = not_detected
+State4 : AGV_position = connected
+State4 --> State9
+State9 : AGV_conveyor = off
+State9 : AGV_con_sensor = connected
+State9 : AGV_cup_sensor = not_detected
+State9 : AGV_position = in_motion_RWD
+State9 --> State10
+State10 : AGV_conveyor = off
+State10 : AGV_con_sensor = not_detected
+State10 : AGV_cup_sensor = not_detected
+State10 : AGV_position = in_motion_RWD
+State10 --> State1
+State1 : IRB_position = at_storage
+State1 : IRB_has_detail = not_detected
+State1 --> State2
+State2 : IRB_position = in_motion_to_conveyor3
+State2 : IRB_has_detail = not_detected
+State2 --> State3
+State3 : IRB_position = at_conveyor3
+State3 : IRB_has_detail = not_detected
+State3 --> State4
+State4 : IRB_position = at_conveyor3
+State4 : IRB_has_detail = detected
+State4 --> State5
+State5 : IRB_position = in_motion_to_storage
+State5 : IRB_has_detail = detected
+State5 --> State6
+State6 : IRB_position = at_storage
+State6 : IRB_has_detail = detected
+State6 --> State1
+State1 : C1_conveyor = off
+State1 : C1_cup_sensor = not_detected
+State1 --> State2
+State2 : C1_conveyor = on
+State2 : C1_cup_sensor = not_detected
+State2 --> State3
+State3 : C1_conveyor = on
+State3 : C1_cup_sensor = detected
+State3 --> State4
+State4 : C1_conveyor = off
+State4 : C1_cup_sensor = detected
+State4 --> State3
+State3 : C1_conveyor = on
+State3 : C1_cup_sensor = detected
+State3 --> State5
+State5 : C1_conveyor = on
+State5 : C1_cup_sensor = detected
+State5 --> State2
+State2 : C1_conveyor = on
+State2 : C1_cup_sensor = not_detected
+State2 --> State1
+State1 : C2_conveyor = off
+State1 : C2_cup_sensor = not_detected
+State1 : C2_has_been_detected = FALSE
+State1 --> State2
+State2 : C2_conveyor = on
+State2 : C2_cup_sensor = not_detected
+State2 : C2_has_been_detected = FALSE
+State2 --> State3
+State3 : C2_conveyor = on
+State3 : C2_cup_sensor = detected
+State3 : C2_has_been_detected = FALSE
+State3 --> State3
+State3 : C2_conveyor = on
+State3 : C2_cup_sensor = detected
+State3 : C2_has_been_detected = FALSE
+State3 --> State5
+State5 : C2_conveyor = on
+State5 : C2_cup_sensor = detected
+State5 : C2_has_been_detected = TRUE
+State5 --> State6
+State6 : C2_conveyor = on
+State6 : C2_cup_sensor = not_detected
+State6 : C2_has_been_detected = TRUE
+State6 --> State7
+State7 : C2_conveyor = off
+State7 : C2_cup_sensor = not_detected
+State7 : C2_has_been_detected = TRUE
+State7 --> State1
+State1 : C3_conveyor = off
+State1 : C3_cup_sensor = not_detected
+State1 : C3_gripper_position = retracted
+State1 : C3_gripper_has_detail = not_detected
+State1 --> State2
+State2 : C3_conveyor = on
+State2 : C3_cup_sensor = not_detected
+State2 : C3_gripper_position = retracted
+State2 : C3_gripper_has_detail = not_detected
+State2 --> State3
+State3 : C3_conveyor = on
+State3 : C3_cup_sensor = detected
+State3 : C3_gripper_position = retracted
+State3 : C3_gripper_has_detail = not_detected
+State3 --> State2
+State2 : C3_conveyor = on
+State2 : C3_cup_sensor = not_detected
+State2 : C3_gripper_position = retracted
+State2 : C3_gripper_has_detail = not_detected
+State2 --> State1
+State1 : C3_conveyor = off
+State1 : C3_cup_sensor = not_detected
+State1 : C3_gripper_position = retracted
+State1 : C3_gripper_has_detail = not_detected
+State1 --> State4
+State4 : C3_conveyor = on
+State4 : C3_cup_sensor = not_detected
+State4 : C3_gripper_position = retracted
+State4 : C3_gripper_has_detail = not_detected
+State4 --> State3
+State3 : C3_conveyor = on
+State3 : C3_cup_sensor = detected
+State3 : C3_gripper_position = retracted
+State3 : C3_gripper_has_detail = not_detected
+State3 --> State20
+State20 : C3_conveyor = off
+State20 : C3_cup_sensor = detected
+State20 : C3_gripper_position = retracted
+State20 : C3_gripper_has_detail = not_detected
+State20 --> State9
+State9 : C3_conveyor = off
+State9 : C3_cup_sensor = detected
+State9 : C3_gripper_position = in_motion_FWD
+State9 : C3_gripper_has_detail = not_detected
+State9 --> State10
+State10 : C3_conveyor = off
+State10 : C3_cup_sensor = detected
+State10 : C3_gripper_position = extended
+State10 : C3_gripper_has_detail = not_detected
+State10 --> State11
+State11 : C3_conveyor = off
+State11 : C3_cup_sensor = detected
+State11 : C3_gripper_position = extended
+State11 : C3_gripper_has_detail = detected
+State11 --> State12
+State12 : C3_conveyor = off
+State12 : C3_cup_sensor = detected
+State12 : C3_gripper_position = in_motion_RWD
+State12 : C3_gripper_has_detail = detected
+State12 --> State13
+State13 : C3_conveyor = off
+State13 : C3_cup_sensor = not_detected
+State13 : C3_gripper_position = in_motion_RWD
+State13 : C3_gripper_has_detail = detected
+State13 --> State14
+State14 : C3_conveyor = off
+State14 : C3_cup_sensor = not_detected
+State14 : C3_gripper_position = retracted
+State14 : C3_gripper_has_detail = detected
+State14 --> State15
+State15 : C3_conveyor = off
+State15 : C3_cup_sensor = not_detected
+State15 : C3_gripper_position = in_motion_FWD
+State15 : C3_gripper_has_detail = detected
+State15 --> State16
+State16 : C3_conveyor = off
+State16 : C3_cup_sensor = detected
+State16 : C3_gripper_position = in_motion_FWD
+State16 : C3_gripper_has_detail = detected
+State16 --> State11
+State11 : C3_conveyor = off
+State11 : C3_cup_sensor = detected
+State11 : C3_gripper_position = extended
+State11 : C3_gripper_has_detail = detected
+State11 --> State10
+State10 : C3_conveyor = off
+State10 : C3_cup_sensor = detected
+State10 : C3_gripper_position = extended
+State10 : C3_gripper_has_detail = not_detected
+State10 --> State19
+State19 : C3_conveyor = off
+State19 : C3_cup_sensor = detected
+State19 : C3_gripper_position = in_motion_RWD
+State19 : C3_gripper_has_detail = not_detected
+State19 --> State20
+State20 : C3_conveyor = off
+State20 : C3_cup_sensor = detected
+State20 : C3_gripper_position = retracted
+State20 : C3_gripper_has_detail = not_detected
+State20 --> State1
+State1 : C4_conveyor = off
+State1 : C4_cup_sensor = not_detected
+State1 --> State2
+State2 : C4_conveyor = on
+State2 : C4_cup_sensor = not_detected
+State2 --> State3
+State3 : C4_conveyor = on
+State3 : C4_cup_sensor = detected
+State3 --> State2
+State2 : C4_conveyor = on
+State2 : C4_cup_sensor = not_detected
+State2 --> State1
+State1 : C5_conveyor = off
+State1 : C5_cup_sensor = not_detected
+State1 : C5_jack_position = retracted
+State1 : C5_sledge_position = at_red_matte
+State1 : C5_has_detail = not_detected
+State1 : C5_has_been_detected = FALSE
+State1 --> State18
+State18 : C5_conveyor = on
+State18 : C5_cup_sensor = not_detected
+State18 : C5_jack_position = retracted
+State18 : C5_sledge_position = at_red_matte
+State18 : C5_has_detail = not_detected
+State18 : C5_has_been_detected = FALSE
+State18 --> State3
+State3 : C5_conveyor = on
+State3 : C5_cup_sensor = detected
+State3 : C5_jack_position = retracted
+State3 : C5_sledge_position = at_red_matte
+State3 : C5_has_detail = not_detected
+State3 : C5_has_been_detected = FALSE
+State3 --> State16
+State16 : C5_conveyor = on
+State16 : C5_cup_sensor = detected
+State16 : C5_jack_position = retracted
+State16 : C5_sledge_position = at_red_matte
+State16 : C5_has_detail = not_detected
+State16 : C5_has_been_detected = TRUE
+State16 --> State5
+State5 : C5_conveyor = on
+State5 : C5_cup_sensor = detected
+State5 : C5_jack_position = in_motion_to_sledge
+State5 : C5_sledge_position = at_red_matte
+State5 : C5_has_detail = not_detected
+State5 : C5_has_been_detected = TRUE
+State5 --> State6
+State6 : C5_conveyor = off
+State6 : C5_cup_sensor = detected
+State6 : C5_jack_position = in_motion_to_sledge
+State6 : C5_sledge_position = at_red_matte
+State6 : C5_has_detail = not_detected
+State6 : C5_has_been_detected = TRUE
+State6 --> State7
+State7 : C5_conveyor = off
+State7 : C5_cup_sensor = detected
+State7 : C5_jack_position = at_sledge
+State7 : C5_sledge_position = at_red_matte
+State7 : C5_has_detail = not_detected
+State7 : C5_has_been_detected = TRUE
+State7 --> State8
+State8 : C5_conveyor = off
+State8 : C5_cup_sensor = detected
+State8 : C5_jack_position = at_sledge
+State8 : C5_sledge_position = at_red_matte
+State8 : C5_has_detail = detected
+State8 : C5_has_been_detected = TRUE
+State8 --> State9
+State9 : C5_conveyor = off
+State9 : C5_cup_sensor = detected
+State9 : C5_jack_position = in_motion_to_cup
+State9 : C5_sledge_position = at_red_matte
+State9 : C5_has_detail = detected
+State9 : C5_has_been_detected = TRUE
+State9 --> State10
+State10 : C5_conveyor = off
+State10 : C5_cup_sensor = detected
+State10 : C5_jack_position = at_cup
+State10 : C5_sledge_position = at_red_matte
+State10 : C5_has_detail = detected
+State10 : C5_has_been_detected = TRUE
+State10 --> State10
+State10 : C5_conveyor = off
+State10 : C5_cup_sensor = detected
+State10 : C5_jack_position = at_cup
+State10 : C5_sledge_position = at_red_matte
+State10 : C5_has_detail = detected
+State10 : C5_has_been_detected = TRUE
+State10 --> State12
+State12 : C5_conveyor = off
+State12 : C5_cup_sensor = detected
+State12 : C5_jack_position = at_cup
+State12 : C5_sledge_position = at_red_matte
+State12 : C5_has_detail = not_detected
+State12 : C5_has_been_detected = TRUE
+State12 --> State12
+State12 : C5_conveyor = off
+State12 : C5_cup_sensor = detected
+State12 : C5_jack_position = at_cup
+State12 : C5_sledge_position = at_red_matte
+State12 : C5_has_detail = not_detected
+State12 : C5_has_been_detected = TRUE
+State12 --> State14
+State14 : C5_conveyor = off
+State14 : C5_cup_sensor = detected
+State14 : C5_jack_position = in_motion_to_start
+State14 : C5_sledge_position = at_red_matte
+State14 : C5_has_detail = not_detected
+State14 : C5_has_been_detected = TRUE
+State14 --> State15
+State15 : C5_conveyor = off
+State15 : C5_cup_sensor = detected
+State15 : C5_jack_position = retracted
+State15 : C5_sledge_position = at_red_matte
+State15 : C5_has_detail = not_detected
+State15 : C5_has_been_detected = TRUE
+State15 --> State16
+State16 : C5_conveyor = on
+State16 : C5_cup_sensor = detected
+State16 : C5_jack_position = retracted
+State16 : C5_sledge_position = at_red_matte
+State16 : C5_has_detail = not_detected
+State16 : C5_has_been_detected = TRUE
+State16 --> State17
+State17 : C5_conveyor = on
+State17 : C5_cup_sensor = not_detected
+State17 : C5_jack_position = retracted
+State17 : C5_sledge_position = at_red_matte
+State17 : C5_has_detail = not_detected
+State17 : C5_has_been_detected = TRUE
+State17 --> State18
+State18 : C5_conveyor = on
+State18 : C5_cup_sensor = not_detected
+State18 : C5_jack_position = retracted
+State18 : C5_sledge_position = at_red_matte
+State18 : C5_has_detail = not_detected
+State18 : C5_has_been_detected = FALSE
+State18 --> State1
+State1 : C6_conveyor = off
+State1 : C6_cup_sensor = not_detected
+State1 --> State2
+State2 : C6_conveyor = on
+State2 : C6_cup_sensor = not_detected
+State2 --> State3
+State3 : C6_conveyor = on
+State3 : C6_cup_sensor = detected
+State3 --> State2
+State2 : C6_conveyor = on
+State2 : C6_cup_sensor = not_detected
+State2 --> State1
+@enduml

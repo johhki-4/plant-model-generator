@@ -1,0 +1,103 @@
+@startuml
+[*] --> State1
+State1 : C3_conveyor = off
+State1 : C3_cup_sensor = not_detected
+State1 : C3_gripper_position = retracted
+State1 : C3_gripper_has_detail = not_detected
+State1 --> State2
+State2 : C3_conveyor = on
+State2 : C3_cup_sensor = not_detected
+State2 : C3_gripper_position = retracted
+State2 : C3_gripper_has_detail = not_detected
+State2 --> State3
+State3 : C3_conveyor = on
+State3 : C3_cup_sensor = detected
+State3 : C3_gripper_position = retracted
+State3 : C3_gripper_has_detail = not_detected
+State3 --> State2
+State2 : C3_conveyor = on
+State2 : C3_cup_sensor = not_detected
+State2 : C3_gripper_position = retracted
+State2 : C3_gripper_has_detail = not_detected
+State2 --> State1
+State1 : C3_conveyor = off
+State1 : C3_cup_sensor = not_detected
+State1 : C3_gripper_position = retracted
+State1 : C3_gripper_has_detail = not_detected
+State1 --> State4
+State4 : C3_conveyor = on
+State4 : C3_cup_sensor = not_detected
+State4 : C3_gripper_position = retracted
+State4 : C3_gripper_has_detail = not_detected
+State4 --> State3
+State3 : C3_conveyor = on
+State3 : C3_cup_sensor = detected
+State3 : C3_gripper_position = retracted
+State3 : C3_gripper_has_detail = not_detected
+State3 --> State20
+State20 : C3_conveyor = off
+State20 : C3_cup_sensor = detected
+State20 : C3_gripper_position = retracted
+State20 : C3_gripper_has_detail = not_detected
+State20 --> State9
+State9 : C3_conveyor = off
+State9 : C3_cup_sensor = detected
+State9 : C3_gripper_position = in_motion_FWD
+State9 : C3_gripper_has_detail = not_detected
+State9 --> State10
+State10 : C3_conveyor = off
+State10 : C3_cup_sensor = detected
+State10 : C3_gripper_position = extended
+State10 : C3_gripper_has_detail = not_detected
+State10 --> State11
+State11 : C3_conveyor = off
+State11 : C3_cup_sensor = detected
+State11 : C3_gripper_position = extended
+State11 : C3_gripper_has_detail = detected
+State11 --> State12
+State12 : C3_conveyor = off
+State12 : C3_cup_sensor = detected
+State12 : C3_gripper_position = in_motion_RWD
+State12 : C3_gripper_has_detail = detected
+State12 --> State13
+State13 : C3_conveyor = off
+State13 : C3_cup_sensor = not_detected
+State13 : C3_gripper_position = in_motion_RWD
+State13 : C3_gripper_has_detail = detected
+State13 --> State14
+State14 : C3_conveyor = off
+State14 : C3_cup_sensor = not_detected
+State14 : C3_gripper_position = retracted
+State14 : C3_gripper_has_detail = detected
+State14 --> State15
+State15 : C3_conveyor = off
+State15 : C3_cup_sensor = not_detected
+State15 : C3_gripper_position = in_motion_FWD
+State15 : C3_gripper_has_detail = detected
+State15 --> State16
+State16 : C3_conveyor = off
+State16 : C3_cup_sensor = detected
+State16 : C3_gripper_position = in_motion_FWD
+State16 : C3_gripper_has_detail = detected
+State16 --> State11
+State11 : C3_conveyor = off
+State11 : C3_cup_sensor = detected
+State11 : C3_gripper_position = extended
+State11 : C3_gripper_has_detail = detected
+State11 --> State10
+State10 : C3_conveyor = off
+State10 : C3_cup_sensor = detected
+State10 : C3_gripper_position = extended
+State10 : C3_gripper_has_detail = not_detected
+State10 --> State19
+State19 : C3_conveyor = off
+State19 : C3_cup_sensor = detected
+State19 : C3_gripper_position = in_motion_RWD
+State19 : C3_gripper_has_detail = not_detected
+State19 --> State20
+State20 : C3_conveyor = off
+State20 : C3_cup_sensor = detected
+State20 : C3_gripper_position = retracted
+State20 : C3_gripper_has_detail = not_detected
+State20 --> State1
+@enduml

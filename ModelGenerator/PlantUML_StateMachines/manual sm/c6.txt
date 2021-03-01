@@ -1,0 +1,15 @@
+@startuml
+[*] --> State1
+State1 : C6_conveyor = off
+State1 : C6_cup_sensor = not_detected
+State1 --> State2
+State2 : C6_conveyor = on
+State2 : C6_cup_sensor = not_detected
+State2 --> State3
+State3 : C6_conveyor = on
+State3 : C6_cup_sensor = detected
+State3 --> State2
+State2 : C6_conveyor = on
+State2 : C6_cup_sensor = not_detected
+State2 --> State1
+@enduml

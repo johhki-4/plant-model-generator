@@ -1,0 +1,129 @@
+@startuml
+[*] --> State1
+State1 : C5_conveyor = off
+State1 : C5_cup_sensor = not_detected
+State1 : C5_jack_position = retracted
+State1 : C5_sledge_position = at_red_matte
+State1 : C5_has_detail = not_detected
+State1 : C5_has_been_detected = FALSE
+State1 --> State18
+State18 : C5_conveyor = on
+State18 : C5_cup_sensor = not_detected
+State18 : C5_jack_position = retracted
+State18 : C5_sledge_position = at_red_matte
+State18 : C5_has_detail = not_detected
+State18 : C5_has_been_detected = FALSE
+State18 --> State3
+State3 : C5_conveyor = on
+State3 : C5_cup_sensor = detected
+State3 : C5_jack_position = retracted
+State3 : C5_sledge_position = at_red_matte
+State3 : C5_has_detail = not_detected
+State3 : C5_has_been_detected = FALSE
+State3 --> State16
+State16 : C5_conveyor = on
+State16 : C5_cup_sensor = detected
+State16 : C5_jack_position = retracted
+State16 : C5_sledge_position = at_red_matte
+State16 : C5_has_detail = not_detected
+State16 : C5_has_been_detected = TRUE
+State16 --> State5
+State5 : C5_conveyor = on
+State5 : C5_cup_sensor = detected
+State5 : C5_jack_position = in_motion_to_sledge
+State5 : C5_sledge_position = at_red_matte
+State5 : C5_has_detail = not_detected
+State5 : C5_has_been_detected = TRUE
+State5 --> State6
+State6 : C5_conveyor = off
+State6 : C5_cup_sensor = detected
+State6 : C5_jack_position = in_motion_to_sledge
+State6 : C5_sledge_position = at_red_matte
+State6 : C5_has_detail = not_detected
+State6 : C5_has_been_detected = TRUE
+State6 --> State7
+State7 : C5_conveyor = off
+State7 : C5_cup_sensor = detected
+State7 : C5_jack_position = at_sledge
+State7 : C5_sledge_position = at_red_matte
+State7 : C5_has_detail = not_detected
+State7 : C5_has_been_detected = TRUE
+State7 --> State8
+State8 : C5_conveyor = off
+State8 : C5_cup_sensor = detected
+State8 : C5_jack_position = at_sledge
+State8 : C5_sledge_position = at_red_matte
+State8 : C5_has_detail = detected
+State8 : C5_has_been_detected = TRUE
+State8 --> State9
+State9 : C5_conveyor = off
+State9 : C5_cup_sensor = detected
+State9 : C5_jack_position = in_motion_to_cup
+State9 : C5_sledge_position = at_red_matte
+State9 : C5_has_detail = detected
+State9 : C5_has_been_detected = TRUE
+State9 --> State10
+State10 : C5_conveyor = off
+State10 : C5_cup_sensor = detected
+State10 : C5_jack_position = at_cup
+State10 : C5_sledge_position = at_red_matte
+State10 : C5_has_detail = detected
+State10 : C5_has_been_detected = TRUE
+State10 --> State10
+State10 : C5_conveyor = off
+State10 : C5_cup_sensor = detected
+State10 : C5_jack_position = at_cup
+State10 : C5_sledge_position = at_red_matte
+State10 : C5_has_detail = detected
+State10 : C5_has_been_detected = TRUE
+State10 --> State12
+State12 : C5_conveyor = off
+State12 : C5_cup_sensor = detected
+State12 : C5_jack_position = at_cup
+State12 : C5_sledge_position = at_red_matte
+State12 : C5_has_detail = not_detected
+State12 : C5_has_been_detected = TRUE
+State12 --> State12
+State12 : C5_conveyor = off
+State12 : C5_cup_sensor = detected
+State12 : C5_jack_position = at_cup
+State12 : C5_sledge_position = at_red_matte
+State12 : C5_has_detail = not_detected
+State12 : C5_has_been_detected = TRUE
+State12 --> State14
+State14 : C5_conveyor = off
+State14 : C5_cup_sensor = detected
+State14 : C5_jack_position = in_motion_to_start
+State14 : C5_sledge_position = at_red_matte
+State14 : C5_has_detail = not_detected
+State14 : C5_has_been_detected = TRUE
+State14 --> State15
+State15 : C5_conveyor = off
+State15 : C5_cup_sensor = detected
+State15 : C5_jack_position = retracted
+State15 : C5_sledge_position = at_red_matte
+State15 : C5_has_detail = not_detected
+State15 : C5_has_been_detected = TRUE
+State15 --> State16
+State16 : C5_conveyor = on
+State16 : C5_cup_sensor = detected
+State16 : C5_jack_position = retracted
+State16 : C5_sledge_position = at_red_matte
+State16 : C5_has_detail = not_detected
+State16 : C5_has_been_detected = TRUE
+State16 --> State17
+State17 : C5_conveyor = on
+State17 : C5_cup_sensor = not_detected
+State17 : C5_jack_position = retracted
+State17 : C5_sledge_position = at_red_matte
+State17 : C5_has_detail = not_detected
+State17 : C5_has_been_detected = TRUE
+State17 --> State18
+State18 : C5_conveyor = on
+State18 : C5_cup_sensor = not_detected
+State18 : C5_jack_position = retracted
+State18 : C5_sledge_position = at_red_matte
+State18 : C5_has_detail = not_detected
+State18 : C5_has_been_detected = FALSE
+State18 --> State1
+@enduml

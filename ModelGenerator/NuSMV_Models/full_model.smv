@@ -1,0 +1,283 @@
+MODULE main 
+	VAR
+		create_cup_cmd : boolean;
+		cup_in_system : boolean;
+		detail_in_system : boolean;
+		AGV_conveyor : {on, off};
+		C1_conveyor : {on, off};
+		C2_conveyor : {on, off};
+		C3_conveyor : {on, off};
+		C4_conveyor : {on, off};
+		C5_conveyor : {on, off};
+		C6_conveyor : {on, off};
+		AGV_con_sensor : {detected, not_detected};
+		AGV_cup_sensor : {detected, not_detected};
+		C1_cup_sensor : {detected, not_detected};
+		C2_cup_sensor : {detected, not_detected};
+		C3_cup_sensor : {detected, not_detected};
+		C4_cup_sensor : {detected, not_detected};
+		C5_cup_sensor : {detected, not_detected};
+		C6_cup_sensor : {detected, not_detected};
+		AGV_position : {in_motion_FWD,  connected,  in_motion_RWD,  start};
+		C3_gripper_position : {in_motion_FWD, extended, in_motion_RWD, retracted};
+		C5_jack_position : {in_motion_to_sledge, at_sledge, in_motion_to_start, retracted, in_motion_to_cup, at_cup};
+		C5_sledge_position : {in_motion_to_red_matte, at_red_matte, in_motion_to_green_matte, at_green_matte};
+		IRB_position : {in_motion_to_conveyor3,  at_storage,  in_motion_to_storage,  at_conveyor3};
+		C3_gripper_has_detail : {not_detected, detected};
+		C5_has_detail : {detected, not_detected};
+		IRB_has_detail : {detected,  not_detected};
+		C2_has_been_detected: boolean;
+		C5_has_been_detected : boolean;
+		
+	ASSIGN
+		init(create_cup_cmd) := FALSE;
+		init(cup_in_system) := FALSE;
+		init(detail_in_system) := FALSE;
+		init(AGV_position ) :=  start;
+		init(AGV_conveyor) :=  off;
+		init(AGV_cup_sensor) :=  not_detected;
+		init(AGV_con_sensor) := not_detected;
+		init(C1_conveyor) := off;
+		init(C1_cup_sensor) := not_detected;
+		init(C2_conveyor) := off;
+		init(C2_cup_sensor) := not_detected;
+		init(C2_has_been_detected) := FALSE;
+		init(C3_gripper_position) :=  retracted;
+		init(C3_gripper_has_detail) :=  not_detected;
+		init(C3_conveyor) :=  off;
+		init(C3_cup_sensor) :=  not_detected;
+		init(C4_conveyor) :=  off;
+		init(C4_cup_sensor) :=  not_detected;
+		init(C5_jack_position) := retracted;
+		init(C5_sledge_position) := at_green_matte;
+		init(C5_conveyor) := off;
+		init(C5_cup_sensor) := not_detected;
+		init(C5_has_detail) := not_detected;
+		init(C5_has_been_detected) := FALSE;
+		init(C6_conveyor) := off;
+		init(C6_cup_sensor) :=  not_detected;
+		init(IRB_position) :=  at_storage;
+		init(IRB_has_detail) :=  not_detected;
+		
+		next(cup_in_system) := case
+			IRB_has_detail = detected: FALSE;
+			AGV_cup_sensor = detected: TRUE;
+			TRUE: cup_in_system;
+		esac;
+		next(detail_in_system) := case
+			(IRB_has_detail = detected) & (IRB_position = at_storage): FALSE;
+			(C5_jack_position = at_cup) & (C5_cup_sensor = detected): TRUE;
+			TRUE: detail_in_system;
+		esac;
+		
+	--- COMP AGV ---		
+		
+		next(AGV_position) := case
+			(AGV_position = start) & (AGV_cup_sensor = not_detected) & (AGV_conveyor = off) & (AGV_con_sensor = not_detected) & (create_cup_cmd = TRUE) & (detail_in_system = FALSE) & (cup_in_system = FALSE): in_motion_FWD;
+			(AGV_position = in_motion_FWD): connected;
+			(AGV_position = connected) & (AGV_cup_sensor = not_detected) & (AGV_conveyor = off) & (AGV_con_sensor = detected): in_motion_RWD;
+			(AGV_position = in_motion_RWD): start;
+			TRUE: AGV_position;
+		esac;
+		next(AGV_cup_sensor) := case
+			(AGV_position = in_motion_FWD) & (AGV_cup_sensor = not_detected) & (AGV_conveyor = off): detected;
+			(AGV_position = connected) & (AGV_cup_sensor = detected) & (AGV_conveyor = on): not_detected;
+			TRUE: AGV_cup_sensor;
+		esac;
+		next(AGV_conveyor) := case
+			(AGV_position = connected) & (AGV_cup_sensor = detected) & (AGV_conveyor = off): on;
+			(AGV_position = connected) & (AGV_cup_sensor = not_detected) & (AGV_conveyor = on) & (C3_cup_sensor = detected): off; 
+			TRUE: AGV_conveyor;
+		esac;
+		next(AGV_con_sensor) := case
+			(AGV_position = connected): detected;
+			(AGV_position != connected): not_detected;
+			TRUE: AGV_con_sensor;
+		esac;
+		
+	--- COMP C1 ---
+		next(C1_conveyor) := case
+			(C1_cup_sensor = not_detected) & (C1_conveyor = off) & (C6_cup_sensor = detected): on;
+			(C2_cup_sensor = detected): off;
+			TRUE: C1_conveyor;
+		esac;
+		next(C1_cup_sensor) := case
+			(C1_cup_sensor = not_detected) & (C1_conveyor = on) & (C2_conveyor = off): detected;
+			(C1_cup_sensor = detected) & (C1_conveyor = on): not_detected;
+			TRUE: C1_cup_sensor;
+		esac;
+		
+	--- COMP C2 ---
+		next(C2_conveyor) := case
+			(C2_cup_sensor = not_detected) & (C2_conveyor = off) & (C1_cup_sensor = detected): on;
+			(C3_cup_sensor = detected): off;
+			TRUE: C2_conveyor;
+		esac;
+		next(C2_cup_sensor) := case
+			(C2_cup_sensor = not_detected) & (C2_conveyor = on) & (C3_conveyor = off): detected;
+			(C2_cup_sensor = detected) & (C2_conveyor = on): not_detected;
+			TRUE: C2_cup_sensor;
+		esac;
+		next(C2_has_been_detected) := case
+			(C2_cup_sensor = detected): TRUE;
+			(IRB_has_detail = detected): FALSE;
+			TRUE: C2_has_been_detected;
+		esac;
+		
+	--- COMP C3 ---
+		next(C3_gripper_position) := case
+			(C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = off) & (C3_cup_sensor = detected) & (C2_has_been_detected = TRUE): in_motion_FWD;
+			(C3_gripper_position = in_motion_FWD): extended;
+			(C3_gripper_position = extended) & (C3_gripper_has_detail = detected) & (C3_conveyor = off) & (C3_cup_sensor = detected): in_motion_RWD;
+			(C3_gripper_position = in_motion_RWD): retracted;
+			(C3_gripper_position = retracted) & (C3_gripper_has_detail = detected) & (C3_conveyor = off) & (C3_cup_sensor = not_detected) & (IRB_position = at_conveyor3): in_motion_FWD;
+			(C3_gripper_position = extended) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = off) & (C3_cup_sensor = detected): in_motion_RWD;
+			TRUE: C3_gripper_position ;
+		esac;
+		next(C3_gripper_has_detail) := case
+			(C3_gripper_position = in_motion_FWD) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = off) & (C3_cup_sensor = detected): detected;
+			(C3_gripper_position = in_motion_FWD) & (C3_gripper_has_detail = detected) & (C3_conveyor = off) & (C3_cup_sensor = not_detected): not_detected;
+			TRUE: C3_gripper_has_detail;
+		esac;
+		next(C3_conveyor) := case ---
+			(C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = off) & (C3_cup_sensor = not_detected) & (AGV_con_sensor = detected | C2_cup_sensor = detected): on;
+			(C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = on) & (C3_cup_sensor = detected) & (C2_cup_sensor = detected): off;  ----------------------------------
+			(C2_has_been_detected = TRUE) & (C3_cup_sensor = detected): off;
+			(C4_cup_sensor = detected): off;  
+			TRUE: C3_conveyor;
+		esac;
+		next(C3_cup_sensor) := case ---
+			(C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = on) & (C3_cup_sensor = not_detected) & (C4_conveyor = off): detected;
+			(C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = on) & (C3_cup_sensor = detected) & (C2_has_been_detected = FALSE): not_detected; 
+			(C3_gripper_position = extended) & (C3_gripper_has_detail = detected) & (C3_conveyor = off) & (C3_cup_sensor = detected): not_detected;
+			(C3_gripper_position = in_motion_FWD) & (C3_gripper_has_detail = detected) & (C3_conveyor = off) & (C3_cup_sensor = not_detected): detected;
+			(C3_gripper_position = extended) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_cup_sensor = not_detected): not_detected;
+			(C3_cup_sensor = detected) & (C2_has_been_detected = TRUE): detected;
+			(IRB_position = at_conveyor3 | IRB_position = in_motion_to_storage) & (IRB_has_detail = detected): not_detected;
+			TRUE: C3_cup_sensor ;
+		esac;		
+		
+	--- COMP C4 ---
+		next(C4_conveyor) := case
+			(C4_cup_sensor = not_detected) & (C4_conveyor = off) & (C3_cup_sensor = detected) & (detail_in_system = FALSE): on;
+			(C5_cup_sensor = detected): off;
+			TRUE: C4_conveyor;
+		esac;
+		next(C4_cup_sensor) := case
+			(C4_cup_sensor = not_detected) & (C4_conveyor = on) & (C5_conveyor = off): detected;
+			(C4_cup_sensor = detected) & (C4_conveyor = on): not_detected;
+			TRUE: C4_cup_sensor;
+		esac;
+		
+	--- COMP C5 ---
+		next(C5_jack_position) := case
+			((C5_jack_position = retracted) & (C5_sledge_position = at_green_matte | C5_sledge_position = at_red_matte) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = not_detected)): in_motion_to_sledge;
+			(C5_jack_position = in_motion_to_sledge): at_sledge; 
+			((C5_jack_position = at_sledge) & (C5_sledge_position = at_green_matte | C5_sledge_position = at_red_matte) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = detected)): in_motion_to_cup;
+			(C5_jack_position = in_motion_to_cup): at_cup;
+			((C5_jack_position = at_cup) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = not_detected)): in_motion_to_start;
+			(C5_jack_position = in_motion_to_start): retracted;
+			TRUE: C5_jack_position;
+		esac;
+		next(C5_sledge_position) := case
+			(C5_sledge_position = at_green_matte) & (C5_has_been_detected = TRUE): in_motion_to_red_matte; 		--- & (command = red): in_motion_to_red_matte; ------------------------------------------------------------------------------------------------------------------
+			(C5_sledge_position = in_motion_to_red_matte): at_red_matte; 										--- & (command = green): in_motion_to_green_matte; ------------------------------------------------------------------------------------------------------------------
+			--(C5_jack_position = retracted | C5_jack_position = at_cup) & (C5_sledge_position = at_red_matte) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = not_detected): in_motion_to_green_matte; --- & (command = green): in_motion_to_green_matte; ------------------------------------------------------------------------------------------------------------------
+			--(C5_jack_position = retracted | C5_jack_position = at_cup) & (C5_sledge_position = in_motion_to_green_matte) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = not_detected): at_green_matte; --- & (command = green): in_motion_to_green_matte; ------------------------------------------------------------------------------------------------------------------
+			--(C5_jack_position = retracted | C5_jack_position = at_cup) & (C5_sledge_position = at_green_matte) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = not_detected) & (command = green): C5_sledge_position; ---------------------------------------------------------
+			--(C5_jack_position = retracted | C5_jack_position = at_cup) & (C5_sledge_position = at_red_matte) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = not_detected) & (command = red): C5_sledge_position; ---------------------------------------------------------
+			TRUE: C5_sledge_position;
+		esac;
+		next(C5_conveyor) := case
+			(C5_conveyor = off) & (C5_cup_sensor = not_detected) & (C5_has_detail = not_detected) & (C4_cup_sensor = detected): on; 
+			(C5_jack_position = retracted) & (C5_conveyor = on) & (C5_cup_sensor = detected) & (detail_in_system = FALSE | C6_cup_sensor = detected): off; 
+			(C5_jack_position = in_motion_to_start) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = not_detected): on;
+			(C5_jack_position = retracted) & (C5_conveyor = on) & (C5_cup_sensor = not_detected) & (C5_has_detail = not_detected) & (C6_cup_sensor = detected): off; 
+			(C6_cup_sensor = detected): off;
+			TRUE: C5_conveyor;
+		esac;
+		next(C5_cup_sensor) := case
+			(C5_conveyor = on) & (C5_cup_sensor = not_detected) & (C5_has_detail = not_detected) & (C6_conveyor = off): detected; 
+			(C5_conveyor = on) & (C5_cup_sensor = detected) & (C5_has_been_detected = TRUE): not_detected;
+			TRUE: C5_cup_sensor;
+		esac;
+		next(C5_has_detail) := case
+			(C5_jack_position = at_sledge) & ((C5_sledge_position = at_red_matte) | (C5_sledge_position = at_green_matte)) & (C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_has_detail = not_detected): detected;
+			(C5_jack_position = at_cup) & ((C5_sledge_position = at_red_matte) | (C5_sledge_position = at_green_matte)) & (C5_cup_sensor = detected) & (C5_has_detail = detected): not_detected;
+			TRUE: C5_has_detail;
+		esac;
+		next(C5_has_been_detected) := case
+			(C5_cup_sensor = detected): TRUE;
+			(C6_cup_sensor = detected): FALSE;
+			TRUE: C5_has_been_detected;
+		esac;
+		
+	--- COMP C6 ---
+		next(C6_conveyor) := case
+			(C6_conveyor = off) & (C5_conveyor = on) & (C5_cup_sensor = detected) & (C5_has_been_detected = TRUE) & (detail_in_system = TRUE): on;
+			(C1_cup_sensor = detected): off;
+			TRUE: C6_conveyor;
+		esac;
+		next(C6_cup_sensor) := case
+			(C6_conveyor = on) & (C6_cup_sensor = not_detected) & (C1_conveyor = off): detected;
+			(C6_conveyor = on) & (C6_cup_sensor = detected): not_detected;
+			TRUE: C6_cup_sensor;
+		esac;
+		
+	--- COMP IRB ---
+		next(IRB_position ) := case ---
+			(IRB_position = at_storage) & (IRB_has_detail = not_detected) & 
+			 (C3_gripper_position = retracted) & (C3_gripper_has_detail = detected) & (C3_conveyor = off) & (C3_cup_sensor = not_detected): in_motion_to_conveyor3;
+			(IRB_position = in_motion_to_conveyor3): at_conveyor3;
+			(IRB_position = at_conveyor3) & (IRB_has_detail = detected): in_motion_to_storage;
+			(IRB_position = in_motion_to_storage): at_storage;
+			TRUE: IRB_position;
+		esac;
+		next(IRB_has_detail) := case ---
+			(IRB_position = at_conveyor3) & (IRB_has_detail = not_detected) &
+			 (C3_gripper_position = extended) & (C3_gripper_has_detail = not_detected) & (C3_conveyor = off) & (C3_cup_sensor = detected): detected;
+			(IRB_position = at_storage) & (IRB_has_detail = detected): not_detected;
+			TRUE: IRB_has_detail;
+		esac;
+		
+	-- The AGV does not move until we issue a create cup command
+	CTLSPEC E [AGV_position = start U create_cup_cmd = TRUE]
+	
+	-- Everytime there is a create cup command, the next state will include the motion of the AGV going forward.
+	CTLSPEC EG(create_cup_cmd = TRUE -> EX(AGV_position = in_motion_FWD))
+	
+	-- If the IRB robot moves into position at conveyor 3, the gripper is already holding a detail.
+	CTLSPEC AG(IRB_position = in_motion_to_conveyor3 -> C3_gripper_has_detail = detected)
+	
+	-- two sensors can not detect the cup at the same time.
+	CTLSPEC AG!((C1_cup_sensor = detected) & (C2_cup_sensor = detected | C3_cup_sensor = detected | C4_cup_sensor = detected | C5_cup_sensor = detected | C6_cup_sensor = detected))
+	CTLSPEC AG!((C2_cup_sensor = detected) & (C3_cup_sensor = detected | C4_cup_sensor = detected | C5_cup_sensor = detected | C6_cup_sensor = detected))
+	CTLSPEC AG!((C3_cup_sensor = detected) & (C4_cup_sensor = detected | C5_cup_sensor = detected | C6_cup_sensor = detected))
+	CTLSPEC AG!((C4_cup_sensor = detected) & (C5_cup_sensor = detected | C6_cup_sensor = detected))
+	CTLSPEC AG!((C5_cup_sensor = detected) & (C6_cup_sensor = detected))
+	
+	-- A subsection can not run unless a detail has been detected at a certain point.
+	CTLSPEC AG (C1_cup_sensor = detected) -> EX (C2_conveyor = on)
+	CTLSPEC AG (C2_cup_sensor = detected) -> EX (C3_conveyor = on)
+	CTLSPEC AG (C3_cup_sensor = detected) -> EX (C4_conveyor = on)
+	CTLSPEC AG (C4_cup_sensor = detected) -> EX (C5_conveyor = on)
+	CTLSPEC AG (C5_cup_sensor = detected) -> EX (C6_conveyor = on)
+	CTLSPEC AG (C6_cup_sensor = detected) -> EX (C1_conveyor = on)
+	
+	-- The IRB cannot move to the plant in order to pick up the cup, unless the cup is in the gripper above conveyor 3.
+	CTLSPEC AG ! (IRB_position = in_motion_to_conveyor3 & C3_gripper_has_detail = not_detected)
+	
+	-- If a cup is in the system, we cannot initialize the process with a new cup
+	CTLSPEC AG !(cup_in_system = TRUE & AGV_position = in_motion_FWD)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

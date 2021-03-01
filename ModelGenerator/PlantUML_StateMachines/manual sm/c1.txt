@@ -1,0 +1,24 @@
+@startuml
+[*] --> State1
+State1 : C1_conveyor = off
+State1 : C1_cup_sensor = not_detected
+State1 --> State2
+State2 : C1_conveyor = on
+State2 : C1_cup_sensor = not_detected
+State2 --> State3
+State3 : C1_conveyor = on
+State3 : C1_cup_sensor = detected
+State3 --> State4
+State4 : C1_conveyor = off
+State4 : C1_cup_sensor = detected
+State4 --> State3
+State3 : C1_conveyor = on
+State3 : C1_cup_sensor = detected
+State3 --> State5
+State5 : C1_conveyor = on
+State5 : C1_cup_sensor = detected
+State5 --> State2
+State2 : C1_conveyor = on
+State2 : C1_cup_sensor = not_detected
+State2 --> State1
+@enduml

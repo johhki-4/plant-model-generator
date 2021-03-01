@@ -1,0 +1,20 @@
+@startuml
+[*] --> State1
+State1 : IRB_position = at_storage
+State1 : IRB_has_detail = not_detected
+State1 --> State2
+State2 : IRB_position = in_motion_to_conveyor3
+State2 : IRB_has_detail = not_detected
+State2 --> State3
+State3 : IRB_position = at_conveyor3
+State3 : IRB_has_detail = not_detected
+State3 --> State4
+State4 : IRB_position = at_conveyor3
+State4 : IRB_has_detail = detected
+State4 --> State5
+State5 : IRB_position = in_motion_to_storage
+State5 : IRB_has_detail = detected
+State5 --> State6
+State6 : IRB_position = at_storage
+State6 : IRB_has_detail = detected
+@enduml

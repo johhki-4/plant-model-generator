@@ -1,0 +1,215 @@
+MODULE main
+	VAR
+		AGV_position : { start, in_motion_FWD, connected, in_motion_RWD };
+		AGV_con_sensor : { not_detected, connected };
+		AGV_conveyor : { off, on };
+		AGV_cup_sensor : { not_detected, detected };
+		IRB_position : { at_storage, in_motion_to_conveyor3, at_conveyor3, in_motion_to_storage };
+		IRB_has_detail : { not_detected, detected };
+		C1_conveyor : { off, on };
+		C1_cup_sensor : { not_detected, detected };
+		C2_conveyor : { off, on };
+		C2_cup_sensor : { not_detected, detected };
+		C2_has_been_detected : boolean;
+		C3_conveyor : { off, on };
+		C3_cup_sensor : { not_detected, detected };
+		C3_gripper_position : { retracted, in_motion_FWD, extended, in_motion_RWD };
+		C3_gripper_has_detail : { not_detected, detected };
+		C4_conveyor : { off, on };
+		C4_cup_sensor : { not_detected, detected };
+		C5_conveyor : { off, on };
+		C5_cup_sensor : { not_detected, detected };
+		C5_has_been_detected : boolean;
+		C5_jack_position : { retracted, in_motion_to_sledge, at_sledge, in_motion_to_cup, at_cup, in_motion_to_start };
+		C5_has_detail : { not_detected, detected };
+		C6_conveyor : { off, on };
+		C6_cup_sensor : { not_detected, detected };
+
+	ASSIGN
+		init(AGV_position ):= start;
+		init(AGV_con_sensor ):= not_detected;
+		init(AGV_conveyor ):= off;
+		init(AGV_cup_sensor ):= not_detected;
+		init(IRB_position ):= at_storage;
+		init(IRB_has_detail ):= not_detected;
+		init(C1_conveyor ):= off;
+		init(C1_cup_sensor ):= not_detected;
+		init(C2_conveyor ):= off;
+		init(C2_cup_sensor ):= not_detected;
+		init(C2_has_been_detected ):= FALSE;
+		init(C3_conveyor ):= off;
+		init(C3_cup_sensor ):= not_detected;
+		init(C3_gripper_position ):= retracted;
+		init(C3_gripper_has_detail ):= not_detected;
+		init(C4_conveyor ):= off;
+		init(C4_cup_sensor ):= not_detected;
+		init(C5_conveyor ):= off;
+		init(C5_cup_sensor ):= not_detected;
+		init(C5_has_been_detected ):= FALSE;
+		init(C5_jack_position ):= retracted;
+		init(C5_has_detail ):= not_detected;
+		init(C6_conveyor ):= off;
+		init(C6_cup_sensor ):= not_detected;
+-----AGV
+		next(AGV_position ) := case
+			(AGV_conveyor = off) & (AGV_con_sensor = not_detected) & (AGV_cup_sensor = not_detected) & (AGV_position = start) : in_motion_FWD;
+			(AGV_position = in_motion_FWD):  connected;
+			(AGV_conveyor = off) & (AGV_con_sensor = not_detected) & (AGV_cup_sensor = not_detected) & (AGV_position = in_motion_FWD) : connected;
+			(AGV_conveyor = off) & (AGV_con_sensor = connected) & (AGV_cup_sensor = not_detected) & (AGV_position = connected) : in_motion_RWD;
+			(AGV_position = in_motion_RWD):  start;
+			(AGV_conveyor = off) & (AGV_con_sensor = connected) & (AGV_cup_sensor = not_detected) & (AGV_position = in_motion_RWD) : in_motion_RWD;
+			(AGV_conveyor = off) & (AGV_con_sensor = not_detected) & (AGV_cup_sensor = not_detected) & (AGV_position = in_motion_RWD) : start;
+			TRUE: AGV_position ;
+		esac;
+		next(AGV_con_sensor ) := case
+			(AGV_conveyor = off) & (AGV_con_sensor = not_detected) & (AGV_cup_sensor = not_detected) & (AGV_position = connected) : connected;
+			(AGV_conveyor = off) & (AGV_con_sensor = connected) & (AGV_cup_sensor = not_detected) & (AGV_position = in_motion_RWD) : not_detected;
+			TRUE: AGV_con_sensor ;
+		esac;
+		next(AGV_conveyor ) := case
+			(AGV_conveyor = off) & (AGV_con_sensor = connected) & (AGV_cup_sensor = not_detected) & (AGV_position = connected) : on;
+			(AGV_conveyor = on) & (AGV_con_sensor = connected) & (AGV_cup_sensor = not_detected) & (AGV_position = connected) : off;
+			TRUE: AGV_conveyor ;
+		esac;
+		next(AGV_cup_sensor ) := case
+			(AGV_conveyor = on) & (AGV_con_sensor = connected) & (AGV_cup_sensor = not_detected) & (AGV_position = connected) : detected;
+			(AGV_conveyor = on) & (AGV_con_sensor = connected) & (AGV_cup_sensor = detected) & (AGV_position = connected) : not_detected;
+			TRUE: AGV_cup_sensor ;
+		esac;
+-----IRB
+		next(IRB_position ) := case
+			(IRB_position = at_storage) & (IRB_has_detail = not_detected) : in_motion_to_conveyor3;
+			(IRB_position = in_motion_to_conveyor3):  at_conveyor3;
+			(IRB_position = in_motion_to_conveyor3) & (IRB_has_detail = not_detected) : at_conveyor3;
+			(IRB_position = at_conveyor3) & (IRB_has_detail = detected) : in_motion_to_storage;
+			(IRB_position = in_motion_to_storage):  at_storage;
+			(IRB_position = in_motion_to_storage) & (IRB_has_detail = detected) : at_storage;
+			TRUE: IRB_position ;
+		esac;
+		next(IRB_has_detail ) := case
+			(IRB_position = at_conveyor3) & (IRB_has_detail = not_detected) : detected;
+			(IRB_position = at_storage) & (IRB_has_detail = detected) : not_detected;
+			TRUE: IRB_has_detail ;
+		esac;
+-----C1
+		next(C1_conveyor ) := case
+			(C1_conveyor = off) & (C1_cup_sensor = not_detected) : on;
+			(C1_conveyor = on) & (C1_cup_sensor = detected) : off;
+			(C1_conveyor = off) & (C1_cup_sensor = detected) : on;
+			(C1_conveyor = on) & (C1_cup_sensor = not_detected) : off;
+			TRUE: C1_conveyor ;
+		esac;
+		next(C1_cup_sensor ) := case
+			(C1_conveyor = on) & (C1_cup_sensor = not_detected) : detected;
+			(C1_conveyor = on) & (C1_cup_sensor = detected) : not_detected;
+			TRUE: C1_cup_sensor ;
+		esac;
+-----C2
+		next(C2_conveyor ) := case
+			(C2_conveyor = off) & (C2_cup_sensor = not_detected) & (C2_has_been_detected = FALSE) : on;
+			(C2_conveyor = on) & (C2_cup_sensor = not_detected) & (C2_has_been_detected = TRUE) : off;
+			TRUE: C2_conveyor ;
+		esac;
+		next(C2_cup_sensor ) := case
+			(C2_conveyor = on) & (C2_cup_sensor = not_detected) & (C2_has_been_detected = FALSE) : detected;
+			(C2_conveyor = on) & (C2_cup_sensor = detected) & (C2_has_been_detected = TRUE) : not_detected;
+			TRUE: C2_cup_sensor ;
+		esac;
+		next(C2_has_been_detected ) := case
+			(C2_conveyor = on) & (C2_cup_sensor = detected) & (C2_has_been_detected = FALSE) : TRUE;
+			(C2_conveyor = off) & (C2_cup_sensor = not_detected) & (C2_has_been_detected = TRUE) : FALSE;
+			TRUE: C2_has_been_detected ;
+		esac;
+-----C3
+		next(C3_conveyor ) := case
+			(C3_conveyor = off) & (C3_cup_sensor = not_detected) & (C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) : on;
+			(C3_conveyor = on) & (C3_cup_sensor = not_detected) & (C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) : off;
+			(C3_conveyor = on) & (C3_cup_sensor = detected) & (C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) : off;
+			TRUE: C3_conveyor ;
+		esac;
+		next(C3_cup_sensor ) := case
+			(C3_conveyor = on) & (C3_cup_sensor = not_detected) & (C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) : detected;
+			(C3_conveyor = on) & (C3_cup_sensor = detected) & (C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) : not_detected;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = in_motion_RWD) & (C3_gripper_has_detail = detected) : not_detected;
+			(C3_conveyor = off) & (C3_cup_sensor = not_detected) & (C3_gripper_position = in_motion_FWD) & (C3_gripper_has_detail = detected) : detected;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) : not_detected;
+			TRUE: C3_cup_sensor ;
+		esac;
+		next(C3_gripper_position ) := case
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = retracted) & (C3_gripper_has_detail = not_detected) : in_motion_FWD;
+			(C3_gripper_position = in_motion_FWD):  extended;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = in_motion_FWD) & (C3_gripper_has_detail = not_detected) : extended;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = extended) & (C3_gripper_has_detail = detected) : in_motion_RWD;
+			(C3_gripper_position = in_motion_RWD):  retracted;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = in_motion_RWD) & (C3_gripper_has_detail = detected) : in_motion_RWD;
+			(C3_conveyor = off) & (C3_cup_sensor = not_detected) & (C3_gripper_position = in_motion_RWD) & (C3_gripper_has_detail = detected) : retracted;
+			(C3_conveyor = off) & (C3_cup_sensor = not_detected) & (C3_gripper_position = retracted) & (C3_gripper_has_detail = detected) : in_motion_FWD;
+			(C3_conveyor = off) & (C3_cup_sensor = not_detected) & (C3_gripper_position = in_motion_FWD) & (C3_gripper_has_detail = detected) : in_motion_FWD;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = in_motion_FWD) & (C3_gripper_has_detail = detected) : extended;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = extended) & (C3_gripper_has_detail = not_detected) : in_motion_RWD;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = in_motion_RWD) & (C3_gripper_has_detail = not_detected) : retracted;
+			TRUE: C3_gripper_position ;
+		esac;
+		next(C3_gripper_has_detail ) := case
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = extended) & (C3_gripper_has_detail = not_detected) : detected;
+			(C3_conveyor = off) & (C3_cup_sensor = detected) & (C3_gripper_position = extended) & (C3_gripper_has_detail = detected) : not_detected;
+			TRUE: C3_gripper_has_detail ;
+		esac;
+-----C4
+		next(C4_conveyor ) := case
+			(C4_conveyor = off) & (C4_cup_sensor = not_detected) : on;
+			(C4_conveyor = on) & (C4_cup_sensor = not_detected) : off;
+			TRUE: C4_conveyor ;
+		esac;
+		next(C4_cup_sensor ) := case
+			(C4_conveyor = on) & (C4_cup_sensor = not_detected) : detected;
+			(C4_conveyor = on) & (C4_cup_sensor = detected) : not_detected;
+			TRUE: C4_cup_sensor ;
+		esac;
+-----C5
+		next(C5_conveyor ) := case
+			(C5_conveyor = off) & (C5_cup_sensor = not_detected) & (C5_jack_position = retracted) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = FALSE) : on;
+			(C5_conveyor = on) & (C5_cup_sensor = detected) & (C5_jack_position = in_motion_to_sledge) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : off;
+			(C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_jack_position = retracted) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : on;
+			(C5_conveyor = on) & (C5_cup_sensor = not_detected) & (C5_jack_position = retracted) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = FALSE) : off;
+			TRUE: C5_conveyor ;
+		esac;
+		next(C5_cup_sensor ) := case
+			(C5_conveyor = on) & (C5_cup_sensor = not_detected) & (C5_jack_position = retracted) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = FALSE) : detected;
+			(C5_conveyor = on) & (C5_cup_sensor = detected) & (C5_jack_position = retracted) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : not_detected;
+			TRUE: C5_cup_sensor ;
+		esac;
+		next(C5_has_been_detected ) := case
+			(C5_conveyor = on) & (C5_cup_sensor = detected) & (C5_jack_position = retracted) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = FALSE) : TRUE;
+			(C5_conveyor = on) & (C5_cup_sensor = not_detected) & (C5_jack_position = retracted) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : FALSE;
+			TRUE: C5_has_been_detected ;
+		esac;
+		next(C5_jack_position ) := case
+			(C5_conveyor = on) & (C5_cup_sensor = detected) & (C5_jack_position = retracted) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : in_motion_to_sledge;
+			(C5_jack_position = in_motion_to_sledge):  at_sledge;
+			(C5_conveyor = on) & (C5_cup_sensor = detected) & (C5_jack_position = in_motion_to_sledge) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : in_motion_to_sledge;
+			(C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_jack_position = in_motion_to_sledge) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : at_sledge;
+			(C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_jack_position = at_sledge) & (C5_sledge_position = at_red_matte) & (C5_has_detail = detected) & (C5_has_been_detected = TRUE) : in_motion_to_cup;
+			(C5_jack_position = in_motion_to_cup):  at_cup;
+			(C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_jack_position = in_motion_to_cup) & (C5_sledge_position = at_red_matte) & (C5_has_detail = detected) & (C5_has_been_detected = TRUE) : at_cup;
+			(C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_jack_position = at_cup) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : in_motion_to_start;
+			(C5_jack_position = in_motion_to_start):  retracted;
+			(C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_jack_position = in_motion_to_start) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : retracted;
+			TRUE: C5_jack_position ;
+		esac;
+		next(C5_has_detail ) := case
+			(C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_jack_position = at_sledge) & (C5_sledge_position = at_red_matte) & (C5_has_detail = not_detected) & (C5_has_been_detected = TRUE) : detected;
+			(C5_conveyor = off) & (C5_cup_sensor = detected) & (C5_jack_position = at_cup) & (C5_sledge_position = at_red_matte) & (C5_has_detail = detected) & (C5_has_been_detected = TRUE) : not_detected;
+			TRUE: C5_has_detail ;
+		esac;
+-----C6
+		next(C6_conveyor ) := case
+			(C6_conveyor = off) & (C6_cup_sensor = not_detected) : on;
+			(C6_conveyor = on) & (C6_cup_sensor = not_detected) : off;
+			TRUE: C6_conveyor ;
+		esac;
+		next(C6_cup_sensor ) := case
+			(C6_conveyor = on) & (C6_cup_sensor = not_detected) : detected;
+			(C6_conveyor = on) & (C6_cup_sensor = detected) : not_detected;
+			TRUE: C6_cup_sensor ;
+		esac;
