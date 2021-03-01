@@ -42,5 +42,5 @@ The state machines are generated in the file `uml_test.txt`. Since this feature 
 - Learn PlantUML: http://plantuml.com/guide
 
 
-# Final Words
+#
 This concludes all the features of the project. 
