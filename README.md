@@ -40,3 +40,7 @@ Then learn the important features in either the User Manual(https://nusmv.fbk.eu
 The state machines are generated in the file `uml_test.txt`. Since this feature is not a completed feature yet, they have been extracted from the generated file and put into their own files in the `manual sm` folder. This enables them to be properly evaluated in PlantUML, and PlantUML can generate the images.
 - Download: https://plantuml.com/download
 - Learn PlantUML: http://plantuml.com/guide
+
+
+# Final Words
+This concludes all the features of the project. 
