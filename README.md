@@ -11,7 +11,7 @@ There are two minor changes to their guide that is needed to make this project w
   - Requirements
     - Setting up dependencies
 
-Take the file `AFOF_2.py` in **this** repository, and do the exact same steps as with the `AFOF.py` in the guide. For both files, you also need to go into the file and on approximately line 30 specify a desired location.
+Take the file `AFOF_2.py` in **this** repository, and do the exact same steps as with the `AFOF.py` in the guide. For both files, you also need to go into the file and on approximately line 30 specify a desired location to save the generated trace log file.
 
 ### Usage of the simulation in Visual Components
 The other small change to the guide is when you get to:
