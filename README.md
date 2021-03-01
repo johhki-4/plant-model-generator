@@ -6,21 +6,19 @@
 Follow all the steps given by the Factory of the Future Repository on github:
 https://version.aalto.fi/gitlab/afof/tracing-products/-/tree/master/
 
-When you get to:
+There are two minor changes to their guide that is needed to make this project work. The first one is a small addition to the guide when you get to:
 - Simulation in Visual Components
   - Requirements
-    - Setting up dependencies,
+    - Setting up dependencies
 
-do the same steps for the `AFOF_2.py` file given in this repository.
-
-You also need to go into the file and on line 30 specify the desired location.
+Take the file `AFOF_2.py` in **this** repository, and do the exact same steps as with the `AFOF.py` in the guide. For both files, you also need to go into the file and on approximately line 30 specify the desired location.
 
 ### Usage of the simulation in Visual Components
-When you get to:
+The other small change to the guide is when you get to:
 - Simulation in Visual Components
-  - Usage,
+  - Usage
 
-open the `PoductionTracing2020.vcmx` file given in **this** repository instead.
+Here, you open the `PoductionTracing2020.vcmx` file given in **this** repository instead of the one given in their repository. If all the steps in their guide are done properly, you should now be able to run the plant and record its traces.
 
 ## Model Generator
 Once the simulations work and you can generate trace files it is time to get the model generator and generate a NuSMV model file from the traces.
