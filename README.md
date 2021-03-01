@@ -3,7 +3,7 @@
 ## Visual Components & nxtSTUDIO
 
 ### Dependencies for the trace generation
-Follow all the steps given by the Factory of the Future Repository on github:
+To get started, follow all the steps given by the Factory of the Future Repository on github:
 https://version.aalto.fi/gitlab/afof/tracing-products/-/tree/master/
 
 There are two minor changes to their guide that is needed to make this project work. The first one is a small addition to the guide when you get to:
