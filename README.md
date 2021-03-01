@@ -25,4 +25,4 @@ Once the simulations work and you can generate trace files it is time to get the
 In the folder `ModelGenerator`, there are some additional folders:
 - `GeneratedTraces`, where the traces from the Visual Components simulations are saved.
 - `NuSMV_Models`, where the generated models of the plant are saved. The files saved here still required the manual additions to link the subsystems together. Compare the full model in `full_model.smv` with the unmodified generated file `2021_3_1_12_58_log.smv` for the changes made in this scenario.
-- `PlantUML_Models`, where
+- `PlantUML_Models`, where the automatically generated state machines are stored. They are generated in the same file `uml_test.txt`, but to visualize how they look, they have been extracted and put into their own files. The `.txt` files are evaluated in PlantUML(https://plantuml.com/state-diagram).
