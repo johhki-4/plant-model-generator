@@ -19,3 +19,6 @@ When you get to:
   - Usage,
 
 open the `PoductionTracing2020.vcmx` file given in **this** repository instead.
+
+## Model Generator
+Once the simulations work and you can generate trace files it is time to get the model generator and generate a NuSMV model file from the traces.
