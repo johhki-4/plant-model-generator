@@ -30,3 +30,8 @@ In the folder `ModelGenerator`, there are some additional folders:
 In addition to these folders, there are two files:
 - `initial_values.txt`, where all values for the plant are noted and their initial values are stored.
 - `model_generator.py`, where the transformation from **trace data** to **NuSMV model file** and **PlantUML state machines** takes place. Note that lines 190-200 in this file specifies folders/locations of files. Make sure that these are setup in a proper way for your system. 
+
+## Evaluating the model in NuSMV
+The NuSMV software (https://nusmv.fbk.eu/) is used to evaluate the `.svm` that are genereted from out model generator. Go to the website and follow the instructions on how to install it.
+
+Then learn the important features in either the User Manual(https://nusmv.fbk.eu/NuSMV/userman/index-v2.html) or the Tutorial(https://nusmv.fbk.eu/NuSMV/tutorial/index.html), so you will know how to execute the generated `.smv` model files.
