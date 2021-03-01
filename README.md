@@ -22,3 +22,7 @@ open the `PoductionTracing2020.vcmx` file given in **this** repository instead.
 
 ## Model Generator
 Once the simulations work and you can generate trace files it is time to get the model generator and generate a NuSMV model file from the traces.
+In the folder `ModelGenerator`, there are some additional folders:
+- `GeneratedTraces`, where the traces from the Visual Components simulations are saved.
+- `NuSMV_Models`, where the generated models of the plant are saved. The files saved here still required the manual additions to link the subsystems together. Compare the full model in `full_model.smv` with the unmodified generated file `2021_3_1_12_58_log.smv` for the changes made in this scenario.
+- `PlantUML_Models`, where
