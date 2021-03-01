@@ -27,7 +27,7 @@ def getTimeStampForFileName():
   
   
 # default path and filename constants
-defaultDirPath = "C:\Users\\JohannesWIN10\\Documents\\nxtSTUDIOProjects\\EnAS 2020 VC\\SkillServer\\nxtSTUDIO\\EnAS 2020 VC with Skills\\ModelGenerator\\GeneratedTraces\\"
+defaultDirPath = "C:\Users\\JohannesWIN10\\Documents\\nxtSTUDIO\\EnAS 2020 VC with Skills\\ModelGenerator\\GeneratedTraces\\"
 defaultFileName = "_trace_log.txt"
 defaultFilePath = defaultDirPath + getTimeStampForFileName() + defaultFileName
 
