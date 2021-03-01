@@ -45,4 +45,4 @@ The state machines are generated in the file `uml_test.txt`. Since this feature 
 
 
 #
-This concludes all the features of the project. 
+This concludes all the features of the project. For retrieval of licenses that can not be done, contact Sandeep Patil at LTU. Contact information: https://www.ltu.se/staff/p/patsan-1.107002?l=en
